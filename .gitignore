@@ -1,0 +1,12 @@
+venv
+env
+*.pyc
+__pycache__
+app/__pycache__
+.pytest_cache
+.vscode
+.DS_Store
+.idea/
+Pipfile
+Pipfile.lock
+static/uploads/*

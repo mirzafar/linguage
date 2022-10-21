@@ -63,51 +63,30 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
-            <li class="menu-item active">
-              <a href="home.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Dashboard</div>
-              </a>
-            </li>
-
-            <!-- Layouts -->
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Layouts</div>
+              <a href="/api/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Listen</div>
               </a>
-
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="layouts-without-menu.html" class="menu-link">
-                    <div data-i18n="Without menu">Without menu</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-without-navbar.html" class="menu-link">
-                    <div data-i18n="Without navbar">Without navbar</div>
-                  </a>
-                </li>
-              </ul>
             </li>
 
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Pages</span>
             </li>
-            <li class="menu-item open">
+            <li id="js-model" class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Account Settings">Models</div>
               </a>
               <ul class="menu-sub">
-                <li class="menu-item active">
-                  <a href="/api/city/" class="menu-link">
-                    <div data-i18n="Account">City</div>
+                <li id="js-topic" class="menu-item">
+                  <a href="/api/topic/" class="menu-link">
+                    <div data-i18n="Account">Topics</div>
                   </a>
                 </li>
-                  <li class="menu-item">
-                      <a href="/api/country/" class="menu-link">
-                        <div data-i18n="Account">Country</div>
+                  <li id="js-word" class="menu-item">
+                      <a href="/api/word/" class="menu-link">
+                        <div data-i18n="Account">Word</div>
                       </a>
                 </li>
               </ul>

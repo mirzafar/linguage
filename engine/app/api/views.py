@@ -39,3 +39,18 @@ class CityView(BaseAPIView):
         cn.save()
 
         return response.json({"name": title})
+
+
+###################################################################
+class TopicView(BaseHTTPView):
+    async def get(self, request):
+        topics = Topic.objects.filter(status=0).order_by('+date')
+        return self.render_template("topic.html", request=request, topics=topics)
+
+
+###################################################################
+class WordView(BaseHTTPView):
+    async def get(self, request):
+        topics = Topic.objects.filter(status=0)
+        words = Word.objects.filter(status=0)
+        return self.render_template("word.html", request=request, words=words, topics=topics)

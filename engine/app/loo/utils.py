@@ -48,6 +48,8 @@ class CollectionAddView(HTTPMethodView):
             flag = True
 
             form_datas = request.form
+            print("----->")
+            print(form_datas)
             undefine = form_datas.get('undefined')
             if undefine:
                 del form_datas['undefined']

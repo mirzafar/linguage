@@ -76,8 +76,8 @@ class Lesson(Document):
 
 
 class LessonWord(Document):
-    lesson_id = ReferenceField('Lesson')
-    word_id = ReferenceField('Word')
+    lesson = ReferenceField('Lesson', reverse_delete_rule=CASCADE)
+    word = ReferenceField('Word', reverse_delete_rule=CASCADE)
     status = IntField(default=0)
 
     def serialize(self):

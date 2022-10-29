@@ -54,3 +54,24 @@ class WordView(BaseHTTPView):
         topics = Topic.objects.filter(status=0)
         words = Word.objects.filter(status=0)
         return self.render_template("word.html", request=request, words=words, topics=topics)
+
+
+###################################################################
+class LessonView(BaseHTTPView):
+    async def get(self, request):
+        lessons = Lesson.objects.filter(status=0)
+        return self.render_template("lesson.html", request=request, lessons=lessons)
+
+
+###################################################################
+class LessonWordView(BaseHTTPView):
+    async def get(self, request, lesson_id):
+        lesson = Lesson.objects.filter(id=lesson_id).first()
+        lesson_words = LessonWord.objects.filter(status=0, lesson=lesson_id)
+        lesson_words_id = []
+        for i in lesson_words:
+            lesson_words_id.append(i.word.id)
+        print(lesson_words_id)
+        words = Word.objects.filter(status=0, id__not__in=lesson_words_id)
+
+        return self.render_template("lesson-word.html", request=request, words=words, lesson=lesson, lesson_words=lesson_words)

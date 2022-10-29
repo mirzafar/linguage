@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block container %}
     <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Topics</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Lessons</h4>
 
               <!-- Hoverable Table rows -->
               <div class="card">
@@ -19,7 +19,7 @@
                         <td><input class="form-control" type="text" name="title"></td>
                         <td><a href="#" class="btn rounded-pill btn-info js-add-new">add</a></td>
                     </tr>
-                    {% for ct in topics %}
+                    {% for ct in lessons %}
                     <tr class="js-cont" data-id="{{ ct.id }}">
                         <td>
                             <span>{{ ct.title }}</span>
@@ -29,6 +29,7 @@
                           <a class="btn btn-warning js-change" href="#"><i class="bx bx-edit-alt me-1"></i> Edit</a>
                           <a style="display: none" class=" btn btn-success js-update" href="#"><i class="bx bx-menu"></i> Save</a>
                           <a class="btn btn-danger js-remove" href="#"><i class="bx bx-trash me-1"></i> Delete</a>
+                          <a href="/api/lesson-word/{{ ct.id }}" class="btn btn-primary">Создать урок</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -57,7 +58,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: '/collection/Topic/' + new_id,
+                url: '/collection/Lesson/' + new_id,
                 data: new_data,
                 success: function (d) {
                     if(d['succes']==true){
@@ -77,7 +78,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: '/collection/Topic/' + new_id,
+                url: '/collection/Lesson/' + new_id,
                 data: new_data,
                 success: function (d) {
                     if(d['succes']==true){
@@ -98,7 +99,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: '/collection/Topic/' + new_id,
+                url: '/collection/Lesson/' + new_id,
                 data: new_data,
                 success: function (d) {
                     if(d['succes']==true){
@@ -122,8 +123,8 @@
 
             return false;
         })
-        $('#js-model').addClass('open active')
-        $('#js-topic').addClass('active')
+        $('#js-lesson').addClass('open active')
+        $('#js-lesson-list').addClass('active')
 
     </script>
 {% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% block container %}
+    <input type="hidden" value="{{ lesson.id }}" id="lesson_id">
+    <div class="container-xxl flex-grow-1 container-p-y">
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Lessons</h4>
+
+              <!-- Hoverable Table rows -->
+{#              <div class="card">#}
+{#                  <h5 class="card-header"><a class="btn rounded-pill btn-dark js-add" href="#">+ add</a></h5>#}
+{#                <div class="table-responsive text-nowrap">#}
+{#                  <table class="table table-hover">#}
+{#                    <thead>#}
+{#                      <tr>#}
+{#                        <th>title</th>#}
+{#                        <th>Actions</th>#}
+{#                      </tr>#}
+{#                    </thead>#}
+{#                    <tbody class="table-border-bottom-0">#}
+{#                    <tr data-id="add" id="new" style="display:none;" class="js-cont">#}
+{#                        <td><input class="form-control" type="text" name="title"></td>#}
+{#                        <td><a href="#" class="btn rounded-pill btn-info js-add-new">add</a></td>#}
+{#                    </tr>#}
+{#                    {% for ct in lessons %}#}
+{#                    <tr class="js-cont" data-id="{{ ct.id }}">#}
+{#                        <td>#}
+{#                            <span>{{ ct.title }}</span>#}
+{#                            <input style="display: none" type="text" class="form-control" name="title" value="{{ ct.title }}">#}
+{#                        </td>#}
+{#                        <td>#}
+{#                          <a class="btn btn-warning js-change" href="#"><i class="bx bx-edit-alt me-1"></i> Edit</a>#}
+{#                          <a style="display: none" class=" btn btn-success js-update" href="#"><i class="bx bx-menu"></i> Save</a>#}
+{#                          <a class="btn btn-danger js-remove" href="#"><i class="bx bx-trash me-1"></i> Delete</a>#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                    {% endfor %}#}
+{##}
+{#                    </tbody>#}
+{#                  </table>#}
+{#                </div>#}
+{#              </div>#}
+              <!--/ Hoverable Table rows -->
+            <div class="col-12">
+                  <div class="card mb-4">
+                    <h5 class="card-header">{{ lesson.title }}</h5>
+                    <div class="card-body">
+                      <small class="text-light fw-semibold">Words</small>
+                      <div class="demo-inline-spacing">
+                          {% for ct in lesson_words %}
+                              <input type="hidden" value="{{ ct.id }}" id="less_word_id">
+                              <a class="btn btn-outline-warning js-word-remove">{{ ct.word.text }} - {{ ct.word.translate }}</a>
+                          {% endfor %}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              <!-- Hoverable Table rows -->
+              <div class="card">
+                <div class="table-responsive text-nowrap">
+                  <h5 class="card-header">Add new words</h5>
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>title</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                    {% for ct in words %}
+                    <tr class="js-cont" data-id="{{ ct.id }}">
+                        <td>
+                            <span>{{ ct.text }} - {{ ct.translate }}</span>
+                        </td>
+                        <td>
+                          <a class=" btn btn-success js-add-word" href="#">+ add</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!--/ Hoverable Table rows -->
+
+              <hr class="my-5" />
+
+            </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/manage.js"></script>
+    <script>
+        $('.js-add-word').click(function(){
+            var new_id = $(this).parents('tr').data('id');
+            var lesson_id = $('#lesson_id').val();
+            var new_data = {
+                "lesson": lesson_id,
+                "word": new_id
+            }
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/collection/LessonWord/add/',
+                data: new_data,
+                success: function (d) {
+                    if(d['succes']==true){
+                        alert("good")
+                        location.reload()
+                    }
+                },
+                error: function (d){
+                    alert("errors")
+                }
+            });
+            return false;
+        })
+        $('.js-word-remove').click(function(){
+            var less_word_id = $('#less_word_id').val();
+            var new_data = {
+                "less_word_id": less_word_id,
+                "status": -1
+            }
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/collection/LessonWord/' + less_word_id,
+                data: new_data,
+                success: function (d) {
+                    if(d['succes']==true){
+                        location.reload()
+                    }
+                },
+                error: function (d){
+                    alert("errors!")
+                }
+            });
+            return false;
+        })
+
+        $('#js-lesson').addClass('open active')
+        $('#js-lesson-list').addClass('active')
+
+    </script>
+{% endblock %}

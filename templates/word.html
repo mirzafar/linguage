@@ -10,7 +10,6 @@
                   <table class="table table-hover">
                     <thead>
                       <tr>
-                        <th>id</th>
                         <th>text</th>
                         <th>audio</th>
                         <th>translate</th>
@@ -21,13 +20,12 @@
                     </thead>
                     <tbody class="table-border-bottom-0">
                     <tr data-id="add" id="new" style="display:none;" class="js-cont">
-                        <td></td>
                         <td><input class="form-control" type="text" name="text"></td>
                         <td>
-
+                            <input type="file" class="form-control" name="audio">
                         </td>
                         <td><input class="form-control" type="text" name="translate" ></td>
-                        <td><input type="file" class="form-control" name="audio_translate" value="3434"></td>
+                        <td><input type="file" class="form-control" name="audio_translate"></td>
                         <td>
                             <select class="form-control" name="topic">
                                 <option value="">Выберите</option>
@@ -40,7 +38,6 @@
                     </tr>
                     {% for ct in words %}
                     <tr class="js-cont" data-id="{{ ct.id }}">
-                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ ct.id }}</strong></td>
                         <td>
                             <span>{{ ct.text }}</span>
                             <input style="display: none" type="text" class="form-control" name="text" value="{{ ct.text }}">
@@ -178,29 +175,16 @@
         $('#js-word').addClass('active')
 
         $('[type="file"]').change(function(){
-            var input1_name = $(this).closest('tr td').find('[name="audio"]');
-            var input2_name = $(this).closest('tr td').find('[name="audio_translate"]');
-            if(input1_name){
-                var audio1_name = $(this).closest('tr td').find('source');
-                uploadImage($(this).attr('id')).then(function(data){
-                    input1_name.val(String(data['file name']));
-                    audio1_name.attr('data-id', data['file name']);
-                    console.log(data)
-                    audio1_name.attr('src', '/static/uploads/' + data['file name']);
-                }, function(data){
-                    alert('error');
-                });
-            }else {
-                var audio_name = $(this).closest('tr td').find('source');
-                uploadImage($(this).attr('id')).then(function (data) {
-                    input2_name.val(String(data['file name']));
-                    audio_name.attr('data-id', data['file name']);
-                    console.log(data)
-                    audio_name.attr('src', '/static/uploads/' + data['file name']);
-                }, function (data) {
-                    alert('error');
-                });
-            }
+            var input_name = $(this).closest('tr td').find('[name="audio"]');
+            var audio_name = $(this).closest('tr td').find('source');
+              uploadImage($(this).attr('id')).then(function(data){
+                input_name.val(String(data['file name']));
+                audio_name.attr('data-id', data['file name']);
+                console.log(data)
+                audio_name.attr('src', '/static/uploads/' + data['file name']);
+              }, function(data){
+                alert('error');
+              });
         })
 
 

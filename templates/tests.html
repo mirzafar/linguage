@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block container %}
+    <input type="hidden" class="lesson_id" value="{{ lesson_id }}">
+    <div class="container-xxl flex-grow-1 container-p-y">
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Test</h4>
+
+              <!-- Hoverable Table rows -->
+              <div class="card">
+              {% if tests|length > 0 %}
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Вопрос</th>
+                        <th>Ответ</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        {% for ts in tests %}
+                        <tr class="js-cont" data-id="{{ ts.id }}">
+                            <td>
+                                <span>{{ ts.lessonword.word.text }}</span>
+                            </td>
+                            <td>
+                                <span><input name="user_otvet" class="form-control" type="text"></span>
+                            </td>
+                            <td>
+                              <a class="btn btn-warning check_result" href="#"><i class="bx bx-edit-alt me-1"></i> отправить на проверку</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                  </table>
+                </div>
+              {% else %}
+                <a class="btn btn-danger" style="color: white" href="/api/test/{{ lesson_id }}?action=start">Start</a>
+                {% endif %}
+              </div>
+              <!--/ Hoverable Table rows -->
+
+              <hr class="my-5" />
+
+            </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/manage.js"></script>
+    <script>
+        $('#js-lesson').addClass('open active')
+        $('#js-lesson-list').addClass('active')
+        $('.check_result').click(function(){
+            var lesson_id = $('.lesson_id').val()
+            var current_id = $(this).parents('tr').data('id')
+            var current_data = getValues('.js-cont[data-id="'+ current_id +'"]')
+            current_data.lesson_id = lesson_id
+            current_data.action = 'check'
+            current_data.userlesson_id = current_id
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/api/test/' + lesson_id,
+                data: current_data,
+                success: function (d) {
+                    if(d['success']==true){
+                        alert("good")
+                        alert((d['flag']))
+                        location.reload()
+                    }
+                },
+                error: function (d){
+                    alert("errors!")
+                }
+            });
+            return false;
+        })
+    </script>
+{% endblock %}

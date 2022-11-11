@@ -11,12 +11,22 @@
                     <thead>
                       <tr>
                         <th>title</th>
+                        <th>limit</th>
+                        <th>active</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
                     <tr data-id="add" id="new" style="display:none;" class="js-cont">
                         <td><input class="form-control" type="text" name="title"></td>
+                        <td><input class="form-control" type="text" name="limit_count"></td>
+                        <td>
+                            <select name="active" class="form-control">
+                                <option selected>Choose</option>
+                                <option value="0">active</option>
+                                <option value="-1">not active</option>
+                            </select>
+                        </td>
                         <td><a href="#" class="btn rounded-pill btn-info js-add-new">add</a></td>
                     </tr>
                     {% for ct in lessons %}
@@ -26,10 +36,23 @@
                             <input style="display: none" type="text" class="form-control" name="title" value="{{ ct.title }}">
                         </td>
                         <td>
+                            <span>{{ ct.limit_count }}</span>
+                            <input style="display: none" type="text" class="form-control" name="limit_count" value="{{ ct.limit_count }}">
+                        </td>
+                        <td>
+                            <span>{% if ct.active == 0 %}active{% elif ct.active == -1 %}not active{% endif %}</span>
+                            <select style="display: none" name="active" class="form-control">
+                                <option >Choose</option>
+                                <option {% if ct.active == 0 %}selected{% endif %} value="0">active</option>
+                                <option {% if ct.active == -1 %}selected{% endif %} value="-1">not active</option>
+                            </select>
+                        </td>
+                        <td>
                           <a class="btn btn-warning js-change" href="#"><i class="bx bx-edit-alt me-1"></i> Edit</a>
                           <a style="display: none" class=" btn btn-success js-update" href="#"><i class="bx bx-menu"></i> Save</a>
                           <a class="btn btn-danger js-remove" href="#"><i class="bx bx-trash me-1"></i> Delete</a>
                           <a href="/api/lesson-word/{{ ct.id }}" class="btn btn-primary">Создать урок</a>
+                          <a href="/api/test/{{ ct.id }}/" class="btn btn-info">Пройти урок</a>
                         </td>
                     </tr>
                     {% endfor %}

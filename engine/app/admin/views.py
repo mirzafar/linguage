@@ -33,6 +33,9 @@ class RegisterView(BaseHTTPView):
         cn.name = name
         cn.save()
 
+        print("***********")
+        print(cn.id)
+
         return response.json({"name": "world"})
 
 

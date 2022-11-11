@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block container %}
+    <div class="container-xxl flex-grow-1 container-p-y">
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Result</h4>
+
+              <!-- Hoverable Table rows -->
+              <div class="card">
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>user</th>
+                        <th>data start</th>
+                        <th>data finish</th>
+                        <th>ball</th>
+                        <th>lesson</th>
+                        <th>status</th>
+                        <th>True/False</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                    {% for it in items %}
+                    <tr>
+                        <td>
+                            <span>{{ it.user.last_name }}</span>
+                        </td>
+                        <td>
+                            <span>{{ it.data_start }}</span>
+                        </td>
+                        <td>
+                            <span>{{ it.data_finish }}</span>
+                        </td>
+                        <td>
+                            <span>{{ it.ball }}</span>
+                        </td>
+                        <td>
+                            <span>{{ it.lesson.title }}</span>
+                        </td>
+                        <td>
+                            <span>{% if it.status == 0 %}in process{% elif it.status == 1 %}completed{% endif %}</span>
+                        </td>
+                        <td>
+                            <span>{{ it.count_true }}/{{ it.count_false }}</span>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!--/ Hoverable Table rows -->
+
+              <hr class="my-5" />
+    <table>
+        <tr>
+            <td></td>
+        </tr>
+        {% for i in userlesson %}
+            {{ i.flag }}
+        {% endfor %}
+    </table>
+
+            </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/manage.js"></script>
+    <script>
+        $('#js-lesson').addClass('open active')
+        $('#js-result-list').addClass('active')
+
+    </script>
+{% endblock %}

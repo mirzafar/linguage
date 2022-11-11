@@ -1,6 +1,6 @@
 from mongoengine import *
 import datetime
-
+from app.admin.models import User
 
 class Country(Document):
     title = StringField(required=True)
@@ -64,6 +64,8 @@ class Word(Document):
 class Lesson(Document):
     title = StringField(required=True, max_length=200)
     create_date = DateTimeField(default=datetime.datetime.utcnow)
+    limit_count = IntField(default=0)
+    active = IntField(default=0)
     status = IntField(default=0)
 
     def serialize(self):
@@ -83,8 +85,49 @@ class LessonWord(Document):
     def serialize(self):
         return {
             "id": str(self.pk),
-            "lesson_id": self.lesson_id.serialize(),
-            "word_id": self.word_id.serialize(),
+            "lesson": self.lesson.serialize(),
+            "word": self.word.serialize(),
             "status": self.status
         }
+
+
+class UserResult(Document):
+    ball = IntField(default=0)
+    data_start = DateTimeField()
+    data_finish = DateTimeField()
+    user = ReferenceField('User', reverse_delete_rule=CASCADE)
+    lesson = ReferenceField('Lesson', reverse_delete_rule=CASCADE)
+    status = IntField(default=0)
+
+    def serialize(self):
+        return {
+            "id": str(self.pk),
+            "ball": self.ball,
+            "data_start": self.data_start,
+            "data_finish": self.data_finish,
+            "user": self.user.serialize(),
+            "lesson": self.lesson.serialize(),
+            "status": self.status
+        }
+
+
+class UserLesson(Document):
+    userresult = ReferenceField('UserResult', reverse_delete_rule=CASCADE)
+    lessonword = ReferenceField('LessonWord', reverse_delete_rule=CASCADE)
+    level = IntField(default=0)
+    user_otvet = StringField(max_length=200)
+    flag = BooleanField(default=False)
+    status = IntField(default=0)
+
+    def serialize(self):
+        return {
+            "id": str(self.pk),
+            "userresult": self.userresult.serialize(),
+            "lessonword": self.lessonword.serialize(),
+            "level": self.level,
+            "user_otvet": self.user_otvet,
+            "flag": self.flag,
+            "status": self.status
+        }
+
 

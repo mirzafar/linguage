@@ -123,6 +123,7 @@ class TestView(BaseHTTPView):
             print(count_userresult)
             current_lesson = Lesson.objects.get(id=test_id)
             print(current_lesson.limit_count)
+
             if active_result and current_lesson.active == 0:
                 active_result = active_result[0]
                 tests = UserLesson.objects.filter(status=0, userresult=active_result.id)

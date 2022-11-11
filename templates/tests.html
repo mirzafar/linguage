@@ -66,7 +66,8 @@
                     if(d['success']==true){
                         alert("good")
                         alert((d['flag']))
-                        location.reload()
+                        window.location.replace('/api/test/'+ lesson_id);
+                        {#location.reload()#}
                     }
                 },
                 error: function (d){

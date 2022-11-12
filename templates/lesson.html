@@ -22,7 +22,6 @@
                         <td><input class="form-control" type="text" name="limit_count"></td>
                         <td>
                             <select name="active" class="form-control">
-                                <option selected>Choose</option>
                                 <option value="0">active</option>
                                 <option value="-1">not active</option>
                             </select>
@@ -42,7 +41,6 @@
                         <td>
                             <span>{% if ct.active == 0 %}active{% elif ct.active == -1 %}not active{% endif %}</span>
                             <select style="display: none" name="active" class="form-control">
-                                <option >Choose</option>
                                 <option {% if ct.active == 0 %}selected{% endif %} value="0">active</option>
                                 <option {% if ct.active == -1 %}selected{% endif %} value="-1">not active</option>
                             </select>

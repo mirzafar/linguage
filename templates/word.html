@@ -48,8 +48,8 @@
                                   <source src="/static/uploads/{{ ct.audio }}" type="audio/ogg">
                                 </audio>
                             <!-- Card -->
-                            <input type="hidden" name="audio" value="{{ ct.audio  }}">
-                            <input style="display: none" type="file" class="form-control" id="file-{{ ct.id }}">
+                            <input type="hidden" name="audio" value="{{ ct.audio }}">
+                            <input style="display: none" type="file" class="form-control" id="file-{{ ct.id }}-2">
                         </td>
                         <td>
                             <span>{{ ct.translate }}</span>
@@ -61,7 +61,7 @@
                                   <source src="/static/uploads/{{ ct.audio_translate }}" type="audio/ogg">
                                 </audio>
                             <!-- Card -->
-                            <input type="hidden" name="audio_translate" value="{{ ct.audio_translate  }}">
+                            <input type="hidden" name="audio_translate" value="{{ ct.audio_translate }}">
                             <input style="display: none" type="file" class="form-control" id="file-{{ ct.id }}">
                         </td>
                         <td>
@@ -177,14 +177,13 @@
         $('[type="file"]').change(function(){
             var input_name = $(this).closest('tr td').find('[name="audio"]');
             var audio_name = $(this).closest('tr td').find('source');
-              uploadImage($(this).attr('id')).then(function(data){
+            uploadImage($(this).attr('id')).then(function(data){
                 input_name.val(String(data['file name']));
                 audio_name.attr('data-id', data['file name']);
-                console.log(data)
                 audio_name.attr('src', '/static/uploads/' + data['file name']);
-              }, function(data){
-                alert('error');
-              });
+                }, function(data){
+                    alert('error');
+                });
         })
 
 

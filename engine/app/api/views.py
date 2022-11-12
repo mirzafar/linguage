@@ -11,42 +11,10 @@ class HomeView(BaseHTTPView):
         return self.render_template("home.html", request=request)
 
 
-class CountryView(BaseHTTPView):
-
-    async def get(self, request):
-        countrys = Country.objects.filter()
-        return self.render_template("country.html", request=request, countrys=countrys)
-
-    async def post(self, request):
-        title = request.form.get('title', '')
-
-        cn = Country()
-        cn.title = title
-        cn.save()
-
-        return response.json({"name": title})
-
-
-class CityView(BaseAPIView):
-    async def get(self, request):
-        countrys = Country.objects.filter()
-        citys = City.objects.filter()
-        return self.render_template("city.html", request=request, citys=list(citys), countrys=countrys)
-
-    async def post(self, request):
-        title = request.form.get('title', '')
-        country_id = request.form.get('country', '')
-
-        cn = City(title=title, country=country_id)
-        cn.save()
-
-        return response.json({"name": title})
-
-
 ###################################################################
 class TopicView(BaseHTTPView):
     async def get(self, request):
-        topics = Topic.objects.filter(status=0).order_by('+date')
+        topics = Topic.objects.filter(status=0).order_by('-create_date')
         return self.render_template("topic.html", request=request, topics=topics)
 
 
@@ -105,7 +73,7 @@ class LessonWordView(BaseHTTPView):
 ###################################################################
 class TestView(BaseHTTPView):
     async def get(self, request, test_id):
-        limit = int(request.args.get('limit', 2))
+        limit = int(request.args.get('limit', 1))
         current_page = int(request.args.get('page', 1))
         skip_count = (current_page - 1) * limit
 
@@ -119,17 +87,15 @@ class TestView(BaseHTTPView):
         if user_id:
             active_result = UserResult.objects.filter(status=0, user=user_id, lesson=test_id)
             count_userresult = UserResult.objects.filter(status__gte=0, user=user_id, lesson=test_id).count()
-            print("========>")
-            print(count_userresult)
             current_lesson = Lesson.objects.get(id=test_id)
-            print(current_lesson.limit_count)
+            current_lessonwords = LessonWord.objects.filter(status=0, lesson=current_lesson.id)
 
             if active_result and current_lesson.active == 0:
                 active_result = active_result[0]
-                tests = UserLesson.objects.filter(status=0, userresult=active_result.id)
+                tests = UserLesson.objects.filter(status=0, userresult=active_result.id).skip(skip_count).limit(limit)
             else:
                 if count_userresult < current_lesson.limit_count and current_lesson.active == 0:
-                    if action == 'start':
+                    if action == 'start' and current_lessonwords:
                         ur = UserResult()
                         ur.user = User.objects.get(status=0, id=user_id)
                         ur.lesson = Lesson.objects.get(status=0, id=test_id)
@@ -149,7 +115,7 @@ class TestView(BaseHTTPView):
                             ul.level = level
                             level += 1
                             ul.save()
-                        tests = UserLesson.objects.filter(status=0, userresult=ur.id)
+                        tests = UserLesson.objects.filter(status=0, userresult=ur.id).skip(skip_count).limit(limit)
 
         return self.render_template("tests.html", request=request, tests=tests, lesson_id=test_id)
 
@@ -160,10 +126,6 @@ class TestView(BaseHTTPView):
             userlesson_id = request.form.get('userlesson_id', '')
             user_otvet = request.form.get('user_otvet', '')
             lesson_id = request.form.get('lesson_id', '')
-
-            print("---->")
-            print(user_otvet)
-            print(userlesson_id)
 
             errors = []
 

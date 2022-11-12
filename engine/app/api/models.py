@@ -2,35 +2,11 @@ from mongoengine import *
 import datetime
 from app.admin.models import User
 
-class Country(Document):
-    title = StringField(required=True)
-    status = IntField(default=0)
-
-    def serialize(self):
-        return {
-            "id": str(self.pk),
-            "title": self.title,
-            "status": self.status
-        }
-
-
-class City(Document):
-    title = StringField(required=True)
-    country = ReferenceField('Country')
-    status = IntField(default=0)
-
-    def serialize(self):
-        return {
-            "id": str(self.pk),
-            "title": self.title,
-            "country": self.country.serialize(),
-            "status": self.status
-        }
-
 
 #######################################################
 class Topic(Document):
     title = StringField(required=True, max_length=200)
+    create_date = DateTimeField(default=datetime.datetime.utcnow)
     status = IntField(default=0)
 
     def serialize(self):

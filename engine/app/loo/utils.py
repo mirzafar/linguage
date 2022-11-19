@@ -55,7 +55,6 @@ class CollectionAddView(HTTPMethodView):
                 del form_datas['undefined']
 
             cn = str_to_class(collection_name)()
-
             for fd in form_datas:
                 try:
                     ty = str_to_class(string.capwords(fd, sep=None)).objects.filter(id=form_datas.get(fd)).first()

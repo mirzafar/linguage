@@ -67,13 +67,42 @@ class LessonWord(Document):
         }
 
 
+class Type(Document):
+    title = StringField(max_length=200)
+    create_date = DateTimeField(default=datetime.datetime.utcnow)
+    status = IntField(default=0)
+
+    def serialize(self):
+        return {
+            "id": str(self.pk),
+            "title": self.title,
+            "status": self.status
+        }
+
+
+class TypeLesson(Document):
+    type = ReferenceField('Type', reverse_delete_rule=CASCADE)
+    lesson = ReferenceField('Lesson', reverse_delete_rule=CASCADE)
+    status = IntField(default=0)
+
+    def serialize(self):
+        return {
+            "id": str(self.pk),
+            "type": self.type,
+            "lesson": self.lesson.serialize(),
+            "status": self.status
+        }
+
+
 class UserResult(Document):
     ball = IntField(default=0)
     data_start = DateTimeField()
     data_finish = DateTimeField()
     user = ReferenceField('User', reverse_delete_rule=CASCADE)
     lesson = ReferenceField('Lesson', reverse_delete_rule=CASCADE)
+    level = IntField(default=0)
     status = IntField(default=0)
+    lesson_types = ListField(max_length=200, default=[])
 
     def serialize(self):
         return {
@@ -94,6 +123,7 @@ class UserLesson(Document):
     user_otvet = StringField(max_length=200)
     flag = BooleanField(default=False)
     status = IntField(default=0)
+    typelesson = ReferenceField('TypeLesson', reverse_delete_rule=CASCADE)
 
     def serialize(self):
         return {
@@ -105,5 +135,3 @@ class UserLesson(Document):
             "flag": self.flag,
             "status": self.status
         }
-
-

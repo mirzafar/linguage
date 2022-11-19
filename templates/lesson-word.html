@@ -51,42 +51,87 @@
                           {% endfor %}
                       </div>
                     </div>
+                    <!-- Hoverable Table rows -->
+                      <div class="card">
+                        <div class="table-responsive text-nowrap">
+                          <h5 class="card-header">words for select</h5>
+                          <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th>title</th>
+                                <th>Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                            {% for ct in words %}
+                            <tr class="js-cont" data-id="{{ ct.id }}">
+                                <td>
+                                    <span>{{ ct.text }} - {{ ct.translate }}</span>
+                                </td>
+                                <td>
+                                  <a class=" btn btn-success js-add-word" href="#">+ add</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <!--/ Hoverable Table rows -->
+                  </div>
+                </div>
+
+              <hr class="my-5" />
+                <div class="col-12">
+                  <div class="card mb-4">
+                    <h5 class="card-header">Types</h5>
+                    <div class="card-body">
+                      <div class="demo-inline-spacing">
+                          {% for i in typelessons %}
+                              <input type="hidden" value="{{ i.id }}" id="less_typetranslate_id">
+                              <a class="btn btn-outline-danger js-type-remove">{{ i.id }}</a>
+                          {% endfor %}
+                      </div>
+                    </div>
+                  <!-- Hoverable Table rows -->
+                      <div class="card">
+                        <div class="table-responsive text-nowrap">
+                          <h5 class="card-header">types for select</h5>
+                          <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th>title</th>
+                                <th>Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                            {% for i in types %}
+                            <tr class="js-cont" data-id="{{ i.id }}">
+                                <td>
+                                    <span>{{ i.title }}</span>
+                                </td>
+                                <td>
+                                  <a class="btn btn-success js-add-type" href="#">+ add</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <!--/ Hoverable Table rows -->
 
                   </div>
                 </div>
 
-              <!-- Hoverable Table rows -->
-              <div class="card">
-                <div class="table-responsive text-nowrap">
-                  <h5 class="card-header">Add new words</h5>
-                  <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th>title</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                    {% for ct in words %}
-                    <tr class="js-cont" data-id="{{ ct.id }}">
-                        <td>
-                            <span>{{ ct.text }} - {{ ct.translate }}</span>
-                        </td>
-                        <td>
-                          <a class=" btn btn-success js-add-word" href="#">+ add</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <!--/ Hoverable Table rows -->
-
               <hr class="my-5" />
 
             </div>
+            </div>
+
+
 
     <script src="/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/static/js/manage.js"></script>
@@ -105,7 +150,6 @@
                 data: new_data,
                 success: function (d) {
                     if(d['succes']==true){
-                        alert("good")
                         location.reload()
                     }
                 },
@@ -141,5 +185,49 @@
         $('#js-lesson').addClass('open active')
         $('#js-lesson-list').addClass('active')
 
+        $('.js-add-type').click(function(){
+            var new_id = $(this).parents('tr').data('id');
+            var lesson_id = $('#lesson_id').val();
+            var new_data = {
+                "type": new_id,
+                "lesson": lesson_id
+            }
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/collection/TypeLesson/add/',
+                data: new_data,
+                success: function (d) {
+                    if(d['succes']==true){
+                        location.reload()
+                    }
+                },
+                error: function (d){
+                    alert("errors")
+                }
+            });
+            return false;
+        })
+        $('.js-type-remove').click(function(){
+            var less_typetranslate_id = $('#less_typetranslate_id').val();
+            var new_data = {
+                "status": -1
+            }
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/collection/TypeLesson/' + less_typetranslate_id,
+                data: new_data,
+                success: function (d) {
+                    if(d['succes']==true){
+                        location.reload()
+                    }
+                },
+                error: function (d){
+                    alert("errors!")
+                }
+            });
+            return false;
+        })
     </script>
 {% endblock %}

@@ -2,7 +2,22 @@
 {% block container %}
     <input type="hidden" class="lesson_id" value="{{ lesson_id }}">
     <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Test</h4>
+            {% if tests|length > 0 %}
+                <div class="card-body">
+                    <div class="alert alert-success js-success" style="text-align: center; display: none;" role="alert">True</div>
+                    <div class="alert alert-danger js-false" style="text-align: center; display: none;" role="alert">False</div>
+                    <div class="alert alert-warning js-errors" style="text-align: center; display: none;" role="alert">This is a warning alert — check it out!</div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                      <div class="demo-vertical-spacing demo-only-element">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: {{ compl_persent }}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            {% endif %}
 
               <!-- Hoverable Table rows -->
               <div class="card">
@@ -18,17 +33,94 @@
                     </thead>
                     <tbody class="table-border-bottom-0">
                         {% for ts in tests %}
-                        <tr class="js-cont" data-id="{{ ts.id }}">
-                            <td>
-                                <span>{{ ts.lessonword.word.text }}</span>
-                            </td>
-                            <td>
-                                <span><input name="user_otvet" class="form-control" type="text"></span>
-                            </td>
-                            <td>
-                              <a class="btn btn-warning check_result" href="#"><i class="bx bx-edit-alt me-1"></i> отправить на проверку</a>
-                            </td>
-                        </tr>
+                            {% if ts.typelesson.type.title == 'text-translate' %}
+                                <ul class="list-group">
+                                  <li class="list-group-item list-group-item-info">Text to Translate</li>
+                                </ul>
+                                <tr class="js-cont" data-id="{{ ts.id }}">
+                                    <td>
+                                        <input type="hidden" name="typelesson_id" value="{{ ts.typelesson.id }}">
+                                        <span>{{ ts.lessonword.word.text }}</span>
+                                    </td>
+                                    <td>
+                                        <span><input name="user_otvet" class="form-control" type="text"></span>
+                                    </td>
+                                    <td>
+                                      <a class="btn btn-warning check_result" href="#"><i class="bx bx-edit-alt me-1"></i> отправить на проверку</a>
+                                    </td>
+                                </tr>
+                            {% elif ts.typelesson.type.title == 'translate-text' %}
+                                <ul class="list-group">
+                                  <li class="list-group-item list-group-item-info">Translate to Text</li>
+                                </ul>
+
+                                <tr class="js-cont" data-id="{{ ts.id }}">
+                                    <td>
+                                        <input type="hidden" name="typelesson_id" value="{{ ts.typelesson.id }}">
+                                        <span>{{ ts.lessonword.word.translate }}</span>
+                                    </td>
+                                    <td>
+                                        <input name="user_otvet" class="form-control" type="text">
+                                    </td>
+                                    <td>
+                                      <a class="btn btn-warning check_result" href="#"><i class="bx bx-edit-alt me-1"></i> отправить на проверку</a>
+                                    </td>
+                                </tr>
+                            {% elif ts.typelesson.type.title == 'audio-text' %}
+                                <ul class="list-group">
+                                  <li class="list-group-item list-group-item-info">Audio to Text</li>
+                                </ul>
+                                <tr class="js-cont" data-id="{{ ts.id }}">
+                                    <td>
+                                        <input type="hidden" name="typelesson_id" value="{{ ts.typelesson.id }}">
+                                        <audio controls>
+                                          <source src="/static/uploads/{{ ts.lessonword.word.audio }}" type="audio/ogg">
+                                        </audio>
+                                    </td>
+                                    <td>
+                                        <span><input name="user_otvet" class="form-control" type="text"></span>
+                                    </td>
+                                    <td>
+                                      <a class="btn btn-warning check_result" href="#"><i class="bx bx-edit-alt me-1"></i> отправить на проверку</a>
+                                    </td>
+                                </tr>
+                            {% elif ts.typelesson.type.title == 'audio-translate' %}
+                                <ul class="list-group">
+                                  <li class="list-group-item list-group-item-info">Audio to Translate</li>
+                                </ul>
+                                <tr class="js-cont" data-id="{{ ts.id }}">
+                                    <td>
+                                        <input type="hidden" name="typelesson_id" value="{{ ts.typelesson.id }}">
+                                        <audio controls>
+                                          <source src="/static/uploads/{{ ts.lessonword.word.audio }}" type="audio/ogg">
+                                        </audio>
+                                    </td>
+                                    <td>
+                                        <span><input name="user_otvet" class="form-control" type="text"></span>
+                                    </td>
+                                    <td>
+                                      <a class="btn btn-warning check_result" href="#"><i class="bx bx-edit-alt me-1"></i> отправить на проверку</a>
+                                    </td>
+                                </tr>
+                            {% elif ts.typelesson.type.title == 'audio-translate-text' %}
+                                <ul class="list-group">
+                                  <li class="list-group-item list-group-item-info">Audio-translate to Text</li>
+                                </ul>
+                                <tr class="js-cont" data-id="{{ ts.id }}">
+                                    <td>
+                                        <input type="hidden" name="typelesson_id" value="{{ ts.typelesson.id }}">
+                                        <audio controls>
+                                          <source src="/static/uploads/{{ ts.lessonword.word.audio_translate }}" type="audio/ogg">
+                                        </audio>
+                                    </td>
+                                    <td>
+                                        <span><input name="user_otvet" class="form-control" type="text"></span>
+                                    </td>
+                                    <td>
+                                      <a class="btn btn-warning check_result" href="#"><i class="bx bx-edit-alt me-1"></i> отправить на проверку</a>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
 
                     </tbody>
@@ -56,7 +148,12 @@
             current_data.lesson_id = lesson_id
             current_data.action = 'check'
             current_data.userlesson_id = current_id
-
+            function rep() {
+              window.location.replace('/api/test/'+ lesson_id);
+            }
+            function myfinc() {
+                setTimeout(rep, 1000);
+            }
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -64,10 +161,15 @@
                 data: current_data,
                 success: function (d) {
                     if(d['success']==true){
-                        alert("good")
-                        alert((d['flag']))
-                        window.location.replace('/api/test/'+ lesson_id);
-                        {#location.reload()#}
+                        if(d['flag'] == true){
+                            $('.js-success').css("display","block");
+                            myfinc()
+                        }else if(d['flag'] == false){
+                            $('.js-false').css("display","block");
+                            myfinc()
+                        }
+                    }else{
+                        $('.js-errors').css("display","block").text(d['errors']);
                     }
                 },
                 error: function (d){

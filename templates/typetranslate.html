@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block container %}
+    <div class="container-xxl flex-grow-1 container-p-y">
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Type translate</h4>
+
+              <!-- Hoverable Table rows -->
+              <div class="card">
+                  <h5 class="card-header"><a class="btn rounded-pill btn-dark js-add" href="#">+ add</a></h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>title</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                    <tr data-id="add" id="new" style="display:none;" class="js-cont">
+                        <td><input class="form-control" type="text" name="title"></td>
+                        <td><a href="#" class="btn rounded-pill btn-info js-add-new">add</a></td>
+                    </tr>
+                    {% for it in items %}
+                    <tr class="js-cont" data-id="{{ it.id }}">
+                        <td>
+                            <span>{{ it.title }}</span>
+                            <input style="display: none" type="text" class="form-control" name="title" value="{{ it.title }}">
+                        </td>
+                        <td>
+                          <a class="btn btn-warning js-change" href="#"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+                          <a style="display: none" class=" btn btn-success js-update" href="#"><i class="bx bx-menu"></i> Save</a>
+                          <a class="btn btn-danger js-remove" href="#"><i class="bx bx-trash me-1"></i> Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!--/ Hoverable Table rows -->
+
+              <hr class="my-5" />
+
+            </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/manage.js"></script>
+    <script>
+        $('.js-add').click(function(){
+            $('#new').show(2000);
+            return false;
+        })
+
+        $('.js-add-new').click(function(){
+            var new_id = $(this).parents('tr').data('id');
+            var new_data = getValues('.js-cont[data-id="'+ new_id +'"]')
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/collection/Type/' + new_id,
+                data: new_data,
+                success: function (d) {
+                    if(d['succes']==true){
+                        alert("good")
+                        location.reload()
+                    }
+                },
+                error: function (d){
+                    alert("errors")
+                }
+            });
+            return false;
+        })
+        $('.js-update').click(function(){
+            var new_id = $(this).parents('tr').data('id');
+            var new_data = getValues('.js-cont[data-id="'+ new_id +'"]')
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/collection/Type/' + new_id,
+                data: new_data,
+                success: function (d) {
+                    if(d['succes']==true){
+                        alert("good")
+                        location.reload()
+                    }
+                },
+                error: function (d){
+                    alert("errors!")
+                }
+            });
+            return false;
+        })
+        $('.js-remove').click(function(){
+            var new_id = $(this).parents('tr').data('id');
+            var new_data = getValues('.js-cont[data-id="'+ new_id +'"]')
+            new_data.status = -1
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/collection/Type/' + new_id,
+                data: new_data,
+                success: function (d) {
+                    if(d['succes']==true){
+                        alert("good")
+                        location.reload()
+                    }
+                },
+                error: function (d){
+                    alert("errors!")
+                }
+            });
+            return false;
+        })
+
+        $('.js-change').click(function(){
+            $(this).hide();
+            $(this).parents('tr').find('span').hide();
+            $(this).parents('tr').find('input').show();
+            $(this).parents('tr').find('select').show();
+            $(this).parents('tr').find('.js-update').show();
+
+            return false;
+        })
+
+    </script>
+{% endblock %}

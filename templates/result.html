@@ -14,6 +14,7 @@
                         <th>data finish</th>
                         <th>ball</th>
                         <th>lesson</th>
+                        <th></th>
                         <th>status</th>
                         <th>True/False</th>
                       </tr>
@@ -35,6 +36,9 @@
                         </td>
                         <td>
                             <span>{{ it.lesson.title }}</span>
+                        </td>
+                        <td>
+                            <span>{{ it.count_type }}</span>
                         </td>
                         <td>
                             <span>{% if it.status == 0 %}in process{% elif it.status == 1 %}completed{% endif %}</span>

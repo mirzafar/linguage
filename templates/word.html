@@ -22,10 +22,12 @@
                     <tr data-id="add" id="new" style="display:none;" class="js-cont">
                         <td><input class="form-control" type="text" name="text"></td>
                         <td>
-                            <input type="file" class="form-control" name="audio">
+
                         </td>
                         <td><input class="form-control" type="text" name="translate" ></td>
-                        <td><input type="file" class="form-control" name="audio_translate"></td>
+                        <td>
+
+                        </td>
                         <td>
                             <select class="form-control" name="topic">
                                 <option value="">Выберите</option>
@@ -42,27 +44,27 @@
                             <span>{{ ct.text }}</span>
                             <input style="display: none" type="text" class="form-control" name="text" value="{{ ct.text }}">
                         </td>
-                        <td>
+                        <td data-name="audio">
                             <!-- Card content -->
                                 <audio controls>
                                   <source src="/static/uploads/{{ ct.audio }}" type="audio/ogg">
                                 </audio>
                             <!-- Card -->
                             <input type="hidden" name="audio" value="{{ ct.audio }}">
-                            <input style="display: none" type="file" class="form-control" id="file-{{ ct.id }}-2">
+                            <input style="display: none" type="file" class="form-control" id="file-{{ ct.id }}">
                         </td>
                         <td>
                             <span>{{ ct.translate }}</span>
                             <input style="display: none" type="text" class="form-control" name="translate" value="{{ ct.translate }}">
                         </td>
-                        <td>
+                        <td data-name="audio_translate">
                             <!-- Card content -->
                                 <audio controls>
                                   <source src="/static/uploads/{{ ct.audio_translate }}" type="audio/ogg">
                                 </audio>
                             <!-- Card -->
                             <input type="hidden" name="audio_translate" value="{{ ct.audio_translate }}">
-                            <input style="display: none" type="file" class="form-control" id="file-{{ ct.id }}">
+                            <input style="display: none" type="file" class="form-control" id="file-{{ ct.id }}-2">
                         </td>
                         <td>
                             <span>{{ ct.topic.title }}</span>
@@ -106,7 +108,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: '/collection/Word/' + new_id,
+                url: '/api/word/',
                 data: new_data,
                 success: function (d) {
                     if(d['succes']==true){
@@ -175,8 +177,9 @@
         $('#js-word').addClass('active')
 
         $('[type="file"]').change(function(){
-            var input_name = $(this).closest('tr td').find('[name="audio"]');
-            var audio_name = $(this).closest('tr td').find('source');
+            var trigger_name = $(this).parents('tr td').data('name');
+            var input_name = $(this).closest('tr').find('[name="'+ trigger_name +'"]');
+            var audio_name = $(this).closest('tr').find('source');
             uploadImage($(this).attr('id')).then(function(data){
                 input_name.val(String(data['file name']));
                 audio_name.attr('data-id', data['file name']);
